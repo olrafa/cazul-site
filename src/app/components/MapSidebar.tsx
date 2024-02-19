@@ -1,5 +1,5 @@
 import React from "react";
 
 export default function MapSidebar() {
-  return <div>MapSidebar</div>;
+  return <div className="w-1/6">MapSidebar</div>;
 }

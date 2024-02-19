@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import "ol/ol.css"; // Import OpenLayers CSS
+
 import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
+import "ol/ol.css";
+import { fromLonLat } from "ol/proj";
 
-const MapComponent: React.FC = () => {
+const MapComponent = () => {
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,15 +23,17 @@ const MapComponent: React.FC = () => {
         }),
       ],
       view: new View({
-        center: [0, 0],
-        zoom: 2,
+        center: fromLonLat([-58.882778, -15.793889]),
+        zoom: 4.5,
       }),
     });
+
+    map.updateSize();
 
     return () => map.dispose();
   }, []);
 
-  return <div ref={mapRef} className="h-screen"></div>;
+  return <div ref={mapRef} className="flex-1"></div>;
 };
 
 export default MapComponent;
