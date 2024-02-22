@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <main>
       <section
-        className="flex flex-col md:flex-row w-screen h-[96vh]"
+        className="flex flex-col md:flex-row w-screen h-[94vh]"
         id="mapa"
       >
         <MapSidebar />

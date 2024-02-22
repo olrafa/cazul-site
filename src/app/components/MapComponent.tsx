@@ -5,9 +5,11 @@ import React, { useEffect, useRef } from "react";
 import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
-import OSM from "ol/source/OSM";
-import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
+import XYZ from "ol/source/XYZ";
+import "ol/ol.css";
+
+import { TILE_ATTRIBUTION, TILE_URL } from "../constants";
 
 const MapComponent = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -19,7 +21,11 @@ const MapComponent = () => {
       target: mapRef.current,
       layers: [
         new TileLayer({
-          source: new OSM(),
+          source: new XYZ({
+            url: TILE_URL,
+            attributions: TILE_ATTRIBUTION,
+            attributionsCollapsible: false,
+          }),
         }),
       ],
       view: new View({
