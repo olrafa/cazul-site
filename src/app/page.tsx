@@ -7,13 +7,13 @@ export default function Home() {
   return (
     <main>
       <section
-        className="flex flex-col md:flex-row w-screen h-screen"
+        className="flex flex-col md:flex-row w-screen h-[96vh]"
         id="mapa"
       >
         <MapSidebar />
         <MapComponent />
       </section>
-      <section>
+      <section id="intro-text">
         <IntroText />
       </section>
     </main>
