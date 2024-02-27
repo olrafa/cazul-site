@@ -7,7 +7,6 @@ import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import { fromLonLat } from "ol/proj";
 import XYZ from "ol/source/XYZ";
-import OSM from "ol/source/OSM";
 import { GeoJSON } from "ol/format";
 import "ol/ol.css";
 
@@ -15,7 +14,11 @@ import { TILE_ATTRIBUTION, TILE_URL } from "../constants";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 
-const MapComponent = () => {
+type MapComponentProps = {
+  updateSideBar: (name: string) => void;
+};
+
+const MapComponent = ({ updateSideBar }: MapComponentProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,7 +42,7 @@ const MapComponent = () => {
           style: {
             "fill-color": "#35DD35",
           },
-          minZoom: 10,
+          minZoom: 8,
         }),
       ],
       view: new View({
@@ -51,8 +54,20 @@ const MapComponent = () => {
 
     map.updateSize();
 
+    map.on("pointermove", (event) => {
+      const features = map.getFeaturesAtPixel(event.pixel);
+      const [feature] = features;
+      if (!feature) {
+        updateSideBar("");
+        return;
+      }
+
+      const properties = feature.getProperties();
+      updateSideBar(properties.nome);
+    });
+
     return () => map.dispose();
-  }, []);
+  }, [updateSideBar]);
 
   return <div ref={mapRef} className="flex-1"></div>;
 };

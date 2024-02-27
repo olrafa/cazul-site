@@ -1,17 +1,13 @@
-import Image from "next/image";
 import MapComponent from "./components/MapComponent";
 import MapSidebar from "./components/MapSidebar";
 import IntroText from "./components/IntroText";
+import MapPage from "./components/MapPage";
 
 export default function Home() {
   return (
     <main>
-      <section
-        className="flex flex-col md:flex-row w-screen h-[94vh]"
-        id="mapa"
-      >
-        <MapSidebar />
-        <MapComponent />
+      <section id="mapa">
+        <MapPage />
       </section>
       <section id="intro-text">
         <IntroText />
