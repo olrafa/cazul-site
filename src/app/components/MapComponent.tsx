@@ -7,9 +7,13 @@ import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import { fromLonLat } from "ol/proj";
 import XYZ from "ol/source/XYZ";
+import OSM from "ol/source/OSM";
+import { GeoJSON } from "ol/format";
 import "ol/ol.css";
 
 import { TILE_ATTRIBUTION, TILE_URL } from "../constants";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
 
 const MapComponent = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -26,6 +30,15 @@ const MapComponent = () => {
             attributions: TILE_ATTRIBUTION,
             attributionsCollapsible: false,
           }),
+        }),
+        new VectorLayer({
+          source: new VectorSource({
+            url: "http://localhost:3002/layers/mangue",
+            format: new GeoJSON(),
+          }),
+          style: {
+            "fill-color": "#35DD35",
+          },
         }),
       ],
       view: new View({
