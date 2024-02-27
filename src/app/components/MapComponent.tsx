@@ -39,11 +39,13 @@ const MapComponent = () => {
           style: {
             "fill-color": "#35DD35",
           },
+          minZoom: 10,
         }),
       ],
       view: new View({
-        center: fromLonLat([-58.882778, -15.793889]),
-        zoom: 4.5,
+        center: fromLonLat([-38.5, -13.5]),
+        zoom: 6.5,
+        maxZoom: 18,
       }),
     });
 
