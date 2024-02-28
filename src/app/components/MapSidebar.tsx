@@ -1,8 +1,8 @@
 import React from "react";
-import { MangueFeature } from "../constants/types";
+import { MangroveFeature } from "../constants/types";
 
 type MapSidebarProps = {
-  feature?: MangueFeature;
+  feature?: MangroveFeature;
 };
 
 export default function MapSidebar({ feature }: MapSidebarProps) {

@@ -10,7 +10,7 @@ import { TILE_ATTRIBUTION, TILE_URL } from "../constants";
 import { View } from "ol";
 import { fromLonLat } from "ol/proj";
 
-export const mangueOriginalStyle = new Style({
+export const mangroveOriginalStyle = new Style({
   fill: new Fill({
     color: "rgba(0, 255, 128, 0.6)",
   }),
@@ -20,7 +20,7 @@ export const mangueOriginalStyle = new Style({
   }),
 });
 
-export const mangueHighlightStyle = new Style({
+export const mangroveHighlightStyle = new Style({
   fill: new Fill({
     color: "rgba(0, 153, 76, 0.8)",
   }),
@@ -30,12 +30,12 @@ export const mangueHighlightStyle = new Style({
   }),
 });
 
-export const mangueLayer = new VectorLayer({
+export const mangroveLayer = new VectorLayer({
   source: new VectorSource({
-    url: "http://localhost:3002/layers/mangue",
+    url: "http://localhost:3002/layers/mangrove",
     format: new GeoJSON(),
   }),
-  style: mangueOriginalStyle,
+  style: mangroveOriginalStyle,
   minZoom: 8,
 });
 

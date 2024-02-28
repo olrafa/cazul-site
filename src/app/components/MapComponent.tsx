@@ -1,34 +1,23 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-
 import Map from "ol/Map";
-import View from "ol/View";
-import TileLayer from "ol/layer/Tile";
-import { fromLonLat } from "ol/proj";
-import XYZ from "ol/source/XYZ";
-import { GeoJSON } from "ol/format";
-import "ol/ol.css";
-
-import { TILE_ATTRIBUTION, TILE_URL } from "../constants";
-import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
 import { Feature } from "ol";
 import { Geometry } from "ol/geom";
-import Style from "ol/style/Style";
-import Fill from "ol/style/Fill";
-import Stroke from "ol/style/Stroke";
+
+import { MangroveFeature } from "../constants/types";
 import {
   baseLayer,
   mainView,
-  mangueHighlightStyle,
-  mangueLayer,
-  mangueOriginalStyle,
+  mangroveHighlightStyle,
+  mangroveLayer,
+  mangroveOriginalStyle,
 } from "../util/mapUtil";
-import { MangueFeature } from "../constants/types";
+
+import "ol/ol.css";
 
 type MapComponentProps = {
-  updateSideBar: (feature: MangueFeature | undefined) => void;
+  updateSideBar: (feature: MangroveFeature | undefined) => void;
 };
 
 const MapComponent = ({ updateSideBar }: MapComponentProps) => {
@@ -39,7 +28,7 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
 
     const map = new Map({
       target: mapRef.current,
-      layers: [baseLayer, mangueLayer],
+      layers: [baseLayer, mangroveLayer],
       view: mainView,
     });
 
@@ -50,10 +39,10 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
       const [feature] = features;
 
       // clear styles
-      const mangueSource = mangueLayer.getSource();
-      mangueSource &&
-        mangueSource.forEachFeature((feat) => {
-          feat.setStyle(mangueOriginalStyle);
+      const mangroveSource = mangroveLayer.getSource();
+      mangroveSource &&
+        mangroveSource.forEachFeature((feat) => {
+          feat.setStyle(mangroveOriginalStyle);
         });
 
       if (!feature) {
@@ -62,14 +51,14 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
       }
 
       const mapFeature = feature as Feature<Geometry>;
-      mapFeature.setStyle(mangueHighlightStyle);
+      mapFeature.setStyle(mangroveHighlightStyle);
 
       const properties = feature.getProperties();
       console.log(properties);
       // const sidebarFeature = properties
 
       const { geometry, ...sidebarFeature } = properties;
-      updateSideBar(sidebarFeature as MangueFeature);
+      updateSideBar(sidebarFeature as MangroveFeature);
     });
 
     return () => map.dispose();
