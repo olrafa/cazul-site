@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Map from "ol/Map";
 import { Feature } from "ol";
 import { Geometry } from "ol/geom";
@@ -8,10 +8,10 @@ import { Geometry } from "ol/geom";
 import { MangroveFeature } from "../constants/types";
 import {
   baseLayer,
+  clearMangroveLayerStyle,
+  getFeaturedFeature,
   mainView,
-  mangroveHighlightStyle,
   mangroveLayer,
-  mangroveOriginalStyle,
 } from "../util/mapUtil";
 
 import "ol/ol.css";
@@ -22,6 +22,8 @@ type MapComponentProps = {
 
 const MapComponent = ({ updateSideBar }: MapComponentProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
+
+  const [isAreaSelected, setIsAreaSelected] = useState(false);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -35,33 +37,39 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
     map.updateSize();
 
     map.on("pointermove", (event) => {
+      if (!isAreaSelected) {
+        const features = map.getFeaturesAtPixel(event.pixel);
+        const [feature] = features;
+        clearMangroveLayerStyle();
+
+        if (!feature) {
+          updateSideBar(undefined);
+          return;
+        }
+
+        const sidebarFeature = getFeaturedFeature(feature as Feature<Geometry>);
+        updateSideBar(sidebarFeature);
+      }
+    });
+
+    map.on("click", (event) => {
       const features = map.getFeaturesAtPixel(event.pixel);
       const [feature] = features;
-
-      // clear styles
-      const mangroveSource = mangroveLayer.getSource();
-      mangroveSource &&
-        mangroveSource.forEachFeature((feat) => {
-          feat.setStyle(mangroveOriginalStyle);
-        });
+      clearMangroveLayerStyle();
 
       if (!feature) {
+        setIsAreaSelected(false);
         updateSideBar(undefined);
         return;
       }
 
-      const mapFeature = feature as Feature<Geometry>;
-      mapFeature.setStyle(mangroveHighlightStyle);
-
-      const properties = feature.getProperties();
-
-      // eslint-disable-next-line unused-imports/no-unused-vars
-      const { geometry, ...sidebarFeature } = properties;
-      updateSideBar(sidebarFeature as MangroveFeature);
+      setIsAreaSelected(true);
+      const sidebarFeature = getFeaturedFeature(feature as Feature<Geometry>);
+      updateSideBar(sidebarFeature);
     });
 
     return () => map.dispose();
-  }, [updateSideBar]);
+  }, [updateSideBar, isAreaSelected]);
 
   return <div ref={mapRef} className="flex-1"></div>;
 };

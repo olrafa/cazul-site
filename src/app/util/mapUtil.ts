@@ -7,8 +7,10 @@ import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import Style from "ol/style/Style";
 import { TILE_ATTRIBUTION, TILE_URL } from "../constants";
-import { View } from "ol";
+import { Feature, View } from "ol";
 import { fromLonLat } from "ol/proj";
+import { Geometry } from "ol/geom";
+import { MangroveFeature } from "../constants/types";
 
 export const mangroveOriginalStyle = new Style({
   fill: new Fill({
@@ -20,7 +22,7 @@ export const mangroveOriginalStyle = new Style({
   }),
 });
 
-export const mangroveHighlightStyle = new Style({
+const mangroveHighlightStyle = new Style({
   fill: new Fill({
     color: "rgba(0, 153, 76, 0.8)",
   }),
@@ -52,3 +54,23 @@ export const mainView = new View({
   zoom: 6.5,
   maxZoom: 18,
 });
+
+export const clearMangroveLayerStyle = () => {
+  const mangroveSource = mangroveLayer.getSource();
+  mangroveSource &&
+    mangroveSource.forEachFeature((feat) => {
+      feat.setStyle(mangroveOriginalStyle);
+    });
+};
+
+export const getFeaturedFeature = (
+  mapFeature: Feature<Geometry>,
+): MangroveFeature => {
+  mapFeature.setStyle(mangroveHighlightStyle);
+
+  const properties = mapFeature.getProperties();
+
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const { geometry, ...sidebarFeature } = properties;
+  return sidebarFeature as MangroveFeature;
+};
