@@ -13,6 +13,18 @@ import "ol/ol.css";
 import { TILE_ATTRIBUTION, TILE_URL } from "../constants";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
+import { Feature } from "ol";
+import { Geometry } from "ol/geom";
+import Style from "ol/style/Style";
+import Fill from "ol/style/Fill";
+import Stroke from "ol/style/Stroke";
+import {
+  baseLayer,
+  mainView,
+  mangueHighlightStyle,
+  mangueLayer,
+  mangueOriginalStyle,
+} from "../util/mapUtil";
 
 type MapComponentProps = {
   updateSideBar: (name: string) => void;
@@ -26,30 +38,8 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
 
     const map = new Map({
       target: mapRef.current,
-      layers: [
-        new TileLayer({
-          source: new XYZ({
-            url: TILE_URL,
-            attributions: TILE_ATTRIBUTION,
-            attributionsCollapsible: false,
-          }),
-        }),
-        new VectorLayer({
-          source: new VectorSource({
-            url: "http://localhost:3002/layers/mangue",
-            format: new GeoJSON(),
-          }),
-          style: {
-            "fill-color": "#35DD35",
-          },
-          minZoom: 8,
-        }),
-      ],
-      view: new View({
-        center: fromLonLat([-38.5, -13.5]),
-        zoom: 6.5,
-        maxZoom: 18,
-      }),
+      layers: [baseLayer, mangueLayer],
+      view: mainView,
     });
 
     map.updateSize();
@@ -57,10 +47,21 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
     map.on("pointermove", (event) => {
       const features = map.getFeaturesAtPixel(event.pixel);
       const [feature] = features;
+
+      // clear styles
+      const mangueSource = mangueLayer.getSource();
+      mangueSource &&
+        mangueSource.forEachFeature((feat) => {
+          feat.setStyle(mangueOriginalStyle);
+        });
+
       if (!feature) {
         updateSideBar("");
         return;
       }
+
+      const mapFeature = feature as Feature<Geometry>;
+      mapFeature.setStyle(mangueHighlightStyle);
 
       const properties = feature.getProperties();
       updateSideBar(properties.nome);
