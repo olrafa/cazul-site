@@ -25,9 +25,10 @@ import {
   mangueLayer,
   mangueOriginalStyle,
 } from "../util/mapUtil";
+import { MangueFeature } from "../constants/types";
 
 type MapComponentProps = {
-  updateSideBar: (name: string) => void;
+  updateSideBar: (feature: MangueFeature | undefined) => void;
 };
 
 const MapComponent = ({ updateSideBar }: MapComponentProps) => {
@@ -56,7 +57,7 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
         });
 
       if (!feature) {
-        updateSideBar("");
+        updateSideBar(undefined);
         return;
       }
 
@@ -64,7 +65,11 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
       mapFeature.setStyle(mangueHighlightStyle);
 
       const properties = feature.getProperties();
-      updateSideBar(properties.nome);
+      console.log(properties);
+      // const sidebarFeature = properties
+
+      const { geometry, ...sidebarFeature } = properties;
+      updateSideBar(sidebarFeature as MangueFeature);
     });
 
     return () => map.dispose();
