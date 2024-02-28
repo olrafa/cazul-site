@@ -54,9 +54,8 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
       mapFeature.setStyle(mangroveHighlightStyle);
 
       const properties = feature.getProperties();
-      console.log(properties);
-      // const sidebarFeature = properties
 
+      // eslint-disable-next-line unused-imports/no-unused-vars
       const { geometry, ...sidebarFeature } = properties;
       updateSideBar(sidebarFeature as MangroveFeature);
     });
