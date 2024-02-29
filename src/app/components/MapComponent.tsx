@@ -95,7 +95,7 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
     };
   }, [updateSideBar]);
 
-  return <div ref={mapRef} className="flex-1"></div>;
+  return <div ref={mapRef} className="flex-1 bg-cazul-blue"></div>;
 };
 
 export default MapComponent;

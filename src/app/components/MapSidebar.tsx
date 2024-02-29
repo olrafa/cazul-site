@@ -8,13 +8,13 @@ type MapSidebarProps = {
 
 export default function MapSidebar({ feature }: MapSidebarProps) {
   if (!feature) {
-    return <div className="w-1/6"></div>;
+    return <></>;
   }
 
   const { nome, uf, classe, bioma } = feature;
 
   return (
-    <div className="w-1/6">
+    <div>
       <p>{nome}</p>
       <p>{uf}</p>
       <p>{bioma}</p>
