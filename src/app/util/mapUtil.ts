@@ -1,4 +1,4 @@
-import { GeoJSON } from "ol/format";
+import { GeoJSON, MVT } from "ol/format";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
@@ -7,10 +7,10 @@ import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import Style from "ol/style/Style";
 import { TILE_ATTRIBUTION, TILE_URL } from "../constants";
-import { Feature, View } from "ol";
+import { View } from "ol";
 import { fromLonLat } from "ol/proj";
-import { Geometry } from "ol/geom";
-import { MangroveFeature } from "../constants/types";
+import VectorTileLayer from "ol/layer/VectorTile";
+import VectorTileSource from "ol/source/VectorTile.js";
 
 export const mangroveOriginalStyle = new Style({
   fill: new Fill({
@@ -22,7 +22,7 @@ export const mangroveOriginalStyle = new Style({
   }),
 });
 
-const mangroveHighlightStyle = new Style({
+export const mangroveHighlightStyle = new Style({
   fill: new Fill({
     color: "rgba(0, 153, 76, 0.8)",
   }),
@@ -30,6 +30,18 @@ const mangroveHighlightStyle = new Style({
     color: "#00CC00",
     width: 1,
   }),
+});
+
+export const mangroveTileSource = new VectorTileSource({
+  url: "http://localhost:3002/tiles/mangrove/{z}/{x}/{y}.png",
+  format: new MVT({
+    idProperty: "id",
+  }),
+});
+
+export const mangroveTileLayer = new VectorTileLayer({
+  source: mangroveTileSource,
+  style: mangroveOriginalStyle,
 });
 
 export const mangroveLayer = new VectorLayer({
@@ -54,23 +66,3 @@ export const mainView = new View({
   zoom: 6.5,
   maxZoom: 18,
 });
-
-export const clearMangroveLayerStyle = () => {
-  const mangroveSource = mangroveLayer.getSource();
-  mangroveSource &&
-    mangroveSource.forEachFeature((feat) => {
-      feat.setStyle(mangroveOriginalStyle);
-    });
-};
-
-export const getFeaturedFeature = (
-  mapFeature: Feature<Geometry>,
-): MangroveFeature => {
-  mapFeature.setStyle(mangroveHighlightStyle);
-
-  const properties = mapFeature.getProperties();
-
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const { geometry, ...sidebarFeature } = properties;
-  return sidebarFeature as MangroveFeature;
-};
