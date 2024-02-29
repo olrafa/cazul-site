@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import MapSidebar from "./MapSidebar";
-import MapComponent from "./MapComponent";
+
 import { MangroveFeature } from "../constants/types";
+
+import MapComponent from "./MapComponent";
+import MapSidebar from "./MapSidebar";
 
 export default function MapPage() {
   const [area, setArea] = useState<MangroveFeature | undefined>(undefined);

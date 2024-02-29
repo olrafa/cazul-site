@@ -1,16 +1,17 @@
+import { View } from "ol";
 import { GeoJSON, MVT } from "ol/format";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
+import VectorTileLayer from "ol/layer/VectorTile";
+import { fromLonLat } from "ol/proj";
 import VectorSource from "ol/source/Vector";
+import VectorTileSource from "ol/source/VectorTile.js";
 import XYZ from "ol/source/XYZ";
 import Fill from "ol/style/Fill";
 import Stroke from "ol/style/Stroke";
 import Style from "ol/style/Style";
+
 import { TILE_ATTRIBUTION, TILE_URL } from "../constants";
-import { View } from "ol";
-import { fromLonLat } from "ol/proj";
-import VectorTileLayer from "ol/layer/VectorTile";
-import VectorTileSource from "ol/source/VectorTile.js";
 
 export const mangroveOriginalStyle = new Style({
   fill: new Fill({

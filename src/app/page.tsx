@@ -1,5 +1,3 @@
-import MapComponent from "./components/MapComponent";
-import MapSidebar from "./components/MapSidebar";
 import IntroText from "./components/IntroText";
 import MapPage from "./components/MapPage";
 

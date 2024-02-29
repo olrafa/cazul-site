@@ -1,7 +1,11 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { MapBrowserEvent } from "ol";
+import BaseEvent from "ol/events/Event";
+import { FeatureLike } from "ol/Feature";
+import VectorTileLayer from "ol/layer/VectorTile";
 import Map from "ol/Map";
+import React, { useEffect, useRef, useState } from "react";
 
 import { MangroveFeature } from "../constants/types";
 import {
@@ -13,9 +17,6 @@ import {
 } from "../util/mapUtil";
 
 import "ol/ol.css";
-import VectorTileLayer from "ol/layer/VectorTile";
-import { FeatureLike } from "ol/Feature";
-import { MapBrowserEvent } from "ol";
 
 type MapComponentProps = {
   updateSideBar: (feature: MangroveFeature | undefined) => void;
@@ -51,24 +52,22 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
 
     let selection: { [key: number]: FeatureLike } = {};
 
-    map.on(["click", "pointermove"], (event) => {
+    const handleEvent = (event: BaseEvent | Event) => {
       if (!(event instanceof MapBrowserEvent)) {
         return;
       }
-
       const isClick = event.type === "click";
 
       if (isClick || !isAreaSelected) {
         mangroveTileLayer.getFeatures(event.pixel).then((features) => {
           selection = {};
           const feature = features[0];
-          isClick && setIsAreaSelected(!!feature);
-
           const fid = feature?.getId() as number;
           if (fid) {
             selection[fid] = feature;
           }
 
+          isClick && console.log(fid);
           selectionLayer.changed();
 
           if (!feature) {
@@ -80,11 +79,18 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
           // eslint-disable-next-line unused-imports/no-unused-vars
           const { layers, ...sidebarFeature } = properties;
           updateSideBar(sidebarFeature as MangroveFeature);
+
+          isClick && setIsAreaSelected(!!feature);
         });
       }
-    });
+    };
 
-    return () => map.dispose();
+    map.on(["click", "pointermove"], handleEvent);
+
+    return () => {
+      map.un(["click", "pointermove"], handleEvent);
+      map.dispose();
+    };
   }, [updateSideBar, isAreaSelected]);
 
   return <div ref={mapRef} className="flex-1"></div>;

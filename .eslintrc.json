@@ -1,6 +1,6 @@
 {
   "extends": "next/core-web-vitals",
-  "plugins": ["unused-imports"],
+  "plugins": ["unused-imports", "simple-import-sort"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "off",
     "unused-imports/no-unused-imports": "error",
@@ -13,6 +13,19 @@
         "argsIgnorePattern": "^_"
       }
     ],
-    "no-console": "warn"
+    "no-console": "warn",
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          ["^[a-z]"],
+          ["^@"],
+          ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+          ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+          ["^.+\\.s?css$"],
+          ["^\\u0000"]
+        ]
+      }
+    ]
   }
 }
