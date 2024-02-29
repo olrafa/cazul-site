@@ -5,7 +5,7 @@ import BaseEvent from "ol/events/Event";
 import { FeatureLike } from "ol/Feature";
 import VectorTileLayer from "ol/layer/VectorTile";
 import Map from "ol/Map";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { MangroveFeature } from "../constants/types";
 import {
@@ -24,8 +24,7 @@ type MapComponentProps = {
 
 const MapComponent = ({ updateSideBar }: MapComponentProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
-
-  const [isAreaSelected, setIsAreaSelected] = useState(false);
+  const isAreaSelectedRef = useRef<boolean>(false);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -58,29 +57,32 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
       }
       const isClick = event.type === "click";
 
-      if (isClick || !isAreaSelected) {
+      if (isClick || !isAreaSelectedRef.current) {
         mangroveTileLayer.getFeatures(event.pixel).then((features) => {
           selection = {};
-          const feature = features[0];
-          const fid = feature?.getId() as number;
-          if (fid) {
-            selection[fid] = feature;
-          }
 
-          isClick && console.log(fid);
-          selectionLayer.changed();
+          const feature = features[0];
 
           if (!feature) {
             updateSideBar(undefined);
+            isAreaSelectedRef.current = false;
+            selectionLayer.changed();
             return;
+          }
+
+          const fid = feature.getId() as number;
+          if (fid) {
+            selection[fid] = feature;
+            selectionLayer.changed();
+            if (isClick) {
+              isAreaSelectedRef.current = true;
+            }
           }
 
           const properties = feature.getProperties();
           // eslint-disable-next-line unused-imports/no-unused-vars
           const { layers, ...sidebarFeature } = properties;
           updateSideBar(sidebarFeature as MangroveFeature);
-
-          isClick && setIsAreaSelected(!!feature);
         });
       }
     };
@@ -91,7 +93,7 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
       map.un(["click", "pointermove"], handleEvent);
       map.dispose();
     };
-  }, [updateSideBar, isAreaSelected]);
+  }, [updateSideBar]);
 
   return <div ref={mapRef} className="flex-1"></div>;
 };
