@@ -2,7 +2,7 @@ import React from "react";
 
 export default function IntroText() {
   return (
-    <div className="m-8">
+    <div className="m-8 mt-4 pt-4">
       <h2>Cazul</h2>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod

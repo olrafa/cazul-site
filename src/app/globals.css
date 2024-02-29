@@ -9,3 +9,6 @@ body {
   overflow-x: hidden;
 }
 
+.ol-attribution.ol-unselectable.ol-control.ol-uncollapsible {
+  right: 1rem;
+}
