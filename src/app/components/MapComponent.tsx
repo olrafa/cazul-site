@@ -14,6 +14,7 @@ import {
   mangroveHighlightStyle,
   mangroveTileLayer,
   mangroveTileSource,
+  populationLayer,
 } from "../util/mapUtil";
 
 import "ol/ol.css";
@@ -31,7 +32,7 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
 
     const map = new Map({
       target: mapRef.current,
-      layers: [baseLayer, mangroveTileLayer],
+      layers: [baseLayer, populationLayer, mangroveTileLayer],
       view: mainView,
     });
 
