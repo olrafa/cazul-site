@@ -19,6 +19,7 @@ export type MunicipalityPopData = {
   dom_urbano: number;
   idade_avg: number;
   municipio: string;
+  geocodm: string;
   sex_homem: number;
   sex_mulher: number;
   total: number;

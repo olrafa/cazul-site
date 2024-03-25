@@ -38,7 +38,17 @@ const populationStyle = new Style({
   stroke: new Stroke({ color: "#8F5EA6", width: 1 }),
 });
 
-export const mangroveTileSource = new VectorTileSource({
+export const populationHighlightStyle = new Style({
+  fill: new Fill({
+    color: "rgba(161, 57, 209, 0.8)",
+  }),
+  stroke: new Stroke({
+    color: "#00CC00",
+    width: 1,
+  }),
+});
+
+const mangroveTileSource = new VectorTileSource({
   url: "http://localhost:3002/tiles/mangrove/{z}/{x}/{y}.png",
   format: new MVT({
     idProperty: "id",
@@ -50,13 +60,15 @@ export const mangroveTileLayer = new VectorTileLayer({
   style: mangroveOriginalStyle,
 });
 
+export const populationSource = new VectorSource({
+  url: "http://localhost:3002/layers/population",
+  format: new GeoJSON(),
+});
+
 export const populationLayer = new VectorLayer({
-  source: new VectorSource({
-    url: "http://localhost:3002/layers/population",
-    format: new GeoJSON(),
-  }),
+  source: populationSource,
   style: populationStyle,
-  minZoom: 8,
+  minZoom: 6,
 });
 
 export const baseLayer = new TileLayer({

@@ -3,7 +3,7 @@
 import { MapBrowserEvent } from "ol";
 import BaseEvent from "ol/events/Event";
 import { FeatureLike } from "ol/Feature";
-import VectorTileLayer from "ol/layer/VectorTile";
+import VectorLayer from "ol/layer/Vector";
 import Map from "ol/Map";
 import React, { useEffect, useRef } from "react";
 
@@ -11,10 +11,10 @@ import { MunicipalityPopData } from "../constants/types";
 import {
   baseLayer,
   mainView,
-  mangroveHighlightStyle,
   mangroveTileLayer,
-  mangroveTileSource,
+  populationHighlightStyle,
   populationLayer,
+  populationSource,
 } from "../util/mapUtil";
 
 import "ol/ol.css";
@@ -36,14 +36,13 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
       view: mainView,
     });
 
-    const selectionLayer = new VectorTileLayer({
+    const selectionLayer = new VectorLayer({
       map: map,
-      renderMode: "vector",
-      source: mangroveTileSource,
+      source: populationSource,
       style: (feature) => {
-        const id = feature.getId();
-        if (id && id in selection) {
-          return mangroveHighlightStyle;
+        const { geocodm } = feature.getProperties();
+        if (geocodm && geocodm in selection) {
+          return populationHighlightStyle;
         }
       },
     });
@@ -71,16 +70,17 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
             return;
           }
 
-          const fid = feature.getId() as number;
-          if (fid) {
-            selection[fid] = feature;
+          const properties = feature.getProperties();
+
+          const { geocodm } = properties;
+
+          if (geocodm) {
+            selection[geocodm] = feature;
             selectionLayer.changed();
             if (isClick) {
               isAreaSelectedRef.current = true;
             }
           }
-
-          const properties = feature.getProperties();
           // eslint-disable-next-line unused-imports/no-unused-vars
           const { geometry, ...sidebarFeature } = properties;
           updateSideBar(sidebarFeature as MunicipalityPopData);
