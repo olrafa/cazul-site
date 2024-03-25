@@ -7,7 +7,7 @@ import VectorTileLayer from "ol/layer/VectorTile";
 import Map from "ol/Map";
 import React, { useEffect, useRef } from "react";
 
-import { MangroveFeature } from "../constants/types";
+import { MunicipalityPopData } from "../constants/types";
 import {
   baseLayer,
   mainView,
@@ -20,7 +20,7 @@ import {
 import "ol/ol.css";
 
 type MapComponentProps = {
-  updateSideBar: (feature: MangroveFeature | undefined) => void;
+  updateSideBar: (municipality: MunicipalityPopData | undefined) => void;
 };
 
 const MapComponent = ({ updateSideBar }: MapComponentProps) => {
@@ -59,7 +59,7 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
       const isClick = event.type === "click";
 
       if (isClick || !isAreaSelectedRef.current) {
-        mangroveTileLayer.getFeatures(event.pixel).then((features) => {
+        populationLayer.getFeatures(event.pixel).then((features) => {
           selection = {};
 
           const feature = features[0];
@@ -82,8 +82,8 @@ const MapComponent = ({ updateSideBar }: MapComponentProps) => {
 
           const properties = feature.getProperties();
           // eslint-disable-next-line unused-imports/no-unused-vars
-          const { layers, ...sidebarFeature } = properties;
-          updateSideBar(sidebarFeature as MangroveFeature);
+          const { geometry, ...sidebarFeature } = properties;
+          updateSideBar(sidebarFeature as MunicipalityPopData);
         });
       }
     };

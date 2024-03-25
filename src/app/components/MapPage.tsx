@@ -2,22 +2,24 @@
 
 import React, { useState } from "react";
 
-import { MangroveFeature } from "../constants/types";
+import { MunicipalityPopData } from "../constants/types";
 
 import MapComponent from "./MapComponent";
 import MapSidebar from "./MapSidebar";
 import Navbar from "./Navbar";
 
 export default function MapPage() {
-  const [area, setArea] = useState<MangroveFeature | undefined>(undefined);
+  const [municipality, setMunicipality] = useState<
+    MunicipalityPopData | undefined
+  >(undefined);
 
   return (
     <div className="flex flex-col md:flex-row w-screen h-screen">
       <div className="w-1/6">
         <Navbar />
-        <MapSidebar feature={area} />
+        <MapSidebar municipality={municipality} />
       </div>
-      <MapComponent updateSideBar={setArea} />
+      <MapComponent updateSideBar={setMunicipality} />
     </div>
   );
 }
