@@ -43,7 +43,7 @@ export const populationHighlightStyle = new Style({
     color: "rgba(161, 57, 209, 0.8)",
   }),
   stroke: new Stroke({
-    color: "#00CC00",
+    color: "#8F5EA6",
     width: 1,
   }),
 });
