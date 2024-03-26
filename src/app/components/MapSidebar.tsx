@@ -30,7 +30,7 @@ export default function MapSidebar({ municipality }: MapSidebarProps) {
   } = municipality;
 
   return (
-    <div>
+    <div className="py-2 px-4">
       <p>{municipio}</p>
       <p>{uf}</p>
       <p>

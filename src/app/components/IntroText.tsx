@@ -1,9 +1,15 @@
+import Image from "next/image";
 import React from "react";
 
 export default function IntroText() {
   return (
     <div className="m-8 mt-4 pt-4">
-      <h2>Cazul</h2>
+      <Image
+        src="/images/cazul_full.png"
+        width={200}
+        height={200}
+        alt="Cazul"
+      />
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Magna ac placerat
